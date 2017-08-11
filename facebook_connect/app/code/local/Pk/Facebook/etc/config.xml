@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Pk_Facebook>
+            <version>0.1.0</version>
+        </Pk_Facebook>
+    </modules>
+    <frontend>
+        <routers>
+            <facebook>
+                <use>standard</use>
+                <args>
+                    <module>Pk_Facebook</module>
+                    <frontName>facebook</frontName>
+                </args>
+            </facebook>
+        </routers>
+        <layout>
+            <updates>
+                <facebook>
+                    <file>facebook.xml</file>
+                </facebook>
+            </updates>
+        </layout>
+        <events>
+            <core_block_abstract_to_html_after>
+                <observers>
+                    <facebook_test>
+                        <type>model</type>
+                        <class>facebook/observer</class>
+                        <method>insertBlock</method>
+                    </facebook_test>
+                </observers>
+            </core_block_abstract_to_html_after>
+        </events>
+    </frontend>
+    <global>
+        <models>
+            <facebook>
+                <class>Pk_Facebook_Model</class>
+                <resourceModel>facebook_mysql4</resourceModel>
+            </facebook>
+            <facebook_mysql4>
+                <class>Pk_Facebook_Model_Mysql4</class>
+                <entities>
+                    <facebook>
+                        <table>facebook</table>
+                    </facebook>
+                    <facebookorder>
+                        <table>facebookorder</table>
+                    </facebookorder>
+                </entities>
+            </facebook_mysql4>
+        </models>
+        <resources>
+            <facebook_setup>
+                <setup>
+                    <module>Pk_Facebook</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </facebook_setup>
+            <facebook_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </facebook_write>
+            <facebook_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </facebook_read>
+        </resources>
+        <blocks>
+            <facebook>
+                <class>Pk_Facebook_Block</class>
+            </facebook>
+        </blocks>
+        <helpers>
+            <facebook>
+                <class>Pk_Facebook_Helper</class>
+            </facebook>
+        </helpers>
+        
+      
+        
+        <events> 
+            <checkout_type_onepage_save_order_after> 
+
+                <observers> 
+                    <save_after_order> 
+
+                        <type>singleton</type> 
+                        <class>Pk_Facebook_Model_Observer</class>
+                        <method>saveOrderAfter</method> 
+
+                    </save_after_order> 
+                </observers> 
+            </checkout_type_onepage_save_order_after> 
+        </events> 
+
+
+        <events> 
+            <catalog_controller_category_init_before> 
+
+                <observers> 
+                    <save_before_category> 
+
+                        <type>singleton</type> 
+                        <class>Pk_Facebook_Model_Observer</class>
+                        <method>saveBeforeCategory</method> 
+
+                    </save_before_category> 
+                </observers> 
+            </catalog_controller_category_init_before> 
+        </events> 
+
+    </global>
+    
+    <adminhtml>
+        <acl>
+            <resources>
+                <admin>  
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <facebook translate="title" module="facebook">  
+                                            <title>Facebook Profile ACL</title>  
+                                            <sort_order>99</sort_order>
+                                        </facebook>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+</config>

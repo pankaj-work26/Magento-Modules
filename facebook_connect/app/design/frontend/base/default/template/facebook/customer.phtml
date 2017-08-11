@@ -1,0 +1,249 @@
+<div class="facebook-main">
+    <h1 class="facebook-title">Facebook Connect</h1>
+    <ul id="facebook_accounts">
+        <li>
+            <div class="info-left"> <img src="<?php echo $this->getSkinUrl('images/facebook-icon.png'); ?>" />
+            </div>
+            <div class="info-right"> 
+                <?php if ($this->getFb() == 'Connect'): ?>
+                    <div class="<?php echo $this->getFb(); ?>"><a  href="javascript:void(0)" onclick="return fbconnect();" ><span id="facebook" class="<?php echo $this->getFb(); ?>"><?php echo $this->getFb(); ?></span></a></div>
+                <?php else: ?>
+
+                    <div class="<?php echo $this->getFb(); ?>"><a  href="<?php echo Mage::getUrl('facebook/index/disconnect'); ?>" ><span id="facebook" class="<?php echo $this->getFb(); ?>"><?php echo $this->getFb(); ?></span></a></div>
+                <?php endif; ?>
+            </div>
+            <div class="clear"></div>
+        </li>
+    </ul>
+</div>
+<div style="clear:both"></div>
+<div class="facebook-profile-main">
+    <div id="login">
+        <a id="facebook_link" href="javascript:void(0);" onclick=" fbconnect();" > <img class="linked_login"  src="<?php echo $this->getSkinUrl('images/facebook/facebook.gif'); ?>" ></a>
+    </div>
+    <div id="logout">
+        <?php $customer_facebook_data = $this->getprofiledata(); ?>
+        <?php print_r($customer_facebook_data); ?>
+
+        <div class="facebook_profile" id="<?php echo $customer_facebook_data['id']; ?>">
+            <a class="facebook_profile_link" href="<?php  echo $customer_facebook_data['profile']['link'];   ?>" target="_blank">
+                <div class="left"> 
+                    <div class="img">
+                        <img src='<?php echo stripslashes("http://graph.facebook.com/" . $customer_facebook_data['id'] . "/picture?type=large"); ?>' class="facebook_profile_picture">
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="name" >
+                        <?php  echo $customer_facebook_data['profile']['name']; ?>
+                    </div>
+                    <div class="gender" >
+                        <?php echo $customer_facebook_data['profile']['gender']; ?>
+                    </div>
+                    <?php if(isset($customer_facebook_data['profile']['birthday'])){ ?>
+                    <div class="dob" >
+                        <?php  echo $customer_facebook_data['profile']['birthday']; ?>
+                    </div>
+                    <?php } ?>
+                    <div class="address" >
+                        <?php   echo $customer_facebook_data['profile']['email']; ?>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<?php $customer_facebook_data = $this->getprofiledata();
+$i=0;
+?>
+
+<?php if ($customer_facebook_data): ?>
+    <div class="facebook_connects">
+
+        <div class='facebook_connects_heading'>
+            <h1>Facebook Connects on Magento: </h1>
+        </div>
+        <table id='facebook_connects'>
+            <thead><tr><th>S.No.</th><th>Profile Picture</th><th>Name</th><th>Email</th></tr></thead>
+            <tbody>
+                <?php $customer_facebook_connect = $this->getconnectdata(); ?>
+                <?php foreach ($customer_facebook_connect as $val) { ?>
+                    <?php $i = $i + 1; ?>
+                    <tr id='<?php echo $val["id"]; ?>'><td><?php echo $i; ?></td><td><img class='connect_profile_picture' src="<?php echo stripslashes("http://graph.facebook.com/" . $val["id"] . "/picture?type=large"); ?>" ></td><td><?php echo $val['profile']['name']; ?></td><td><?php echo $val['profile']['email']; ?></td></tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
+    <script type="text/javascript">
+        //<![CDATA[
+        decorateTable('facebook_connects');
+        //]]>
+    </script>
+<?php endif; ?>
+<div class='loader-main'>
+    <div class="loader" id="loader" ><img src="<?php echo $this->getSkinUrl('fancyapps/loader.gif'); ?>"></div>
+</div>
+
+<script>
+    var apiKey = '<?php echo Mage::getStoreConfig('facebook/facebook_group/facebook_input1'); ?>';
+
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: "<?php echo Mage::getStoreConfig('facebook/facebook_group/facebook_input1'); ?>",
+            scope: "email",
+            xfbml: true,
+            version: "v2.8"
+        });
+    };
+
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, "script", "facebook-jssdk"));
+
+    function testAPI() {
+        jQuery('.loader-main').show();
+        jQuery('.loader').show();
+        FB.api("/me?fields=name,birthday,gender,location,link,email", function (response_profile) {
+            id = response_profile.id;
+            response = response_profile;
+            console.log(response_profile);
+            profile_pic = "http://graph.facebook.com/" + response_profile.id + "/picture?type=large";
+
+            FB.api("/" + id + "/friends", function (response_friend) {
+
+                console.log(response_friend);
+                response_profile = JSON.stringify(response_profile);
+                response_friend = JSON.stringify(response_friend.data);
+
+
+                new Ajax.Request("<?php echo Mage::getUrl('facebook/index/savefacebookprofile'); ?>", {
+                    method: "post"
+                    , parameters: {
+                        id: id,
+                        profile_data: response_profile,
+                        friends_data: response_friend
+
+
+
+                    }
+                    , requestHeaders: {Accept: "application/json"},
+                    onSuccess: function (transport) {
+                        timeresult = transport.responseText.evalJSON();
+
+
+                        if (timeresult == 'success')
+                        {
+
+                            jQuery(".facebook_profile_link").attr("href", response.link);
+                            jQuery(".facebook_profile").attr("id", id);
+                            jQuery(".facebook_profile_picture").attr("src", profile_pic);
+                            jQuery(".name").html(response.name);
+                            jQuery(".gender").html(response.gender);
+                            jQuery(".dob").html(response.birthday);
+                            jQuery(".address").html(response.email);
+
+                            jQuery('#login').hide();
+                            jQuery("#logout").show();
+                            jQuery('.loader-main').hide();
+                            jQuery('.loader').hide();
+
+
+                        } else {
+                            alert(timeresult);
+                        }
+                    }
+                });
+
+                // });
+            });
+        });
+    }
+
+
+
+    function fbconnect()
+    {
+        if (!apiKey) {
+            alert('Please enter api key.');
+            return true;
+        }
+        ajaxurl = "<?php echo Mage::getUrl('facebook/index/connect'); ?>";
+        new Ajax.Request(ajaxurl, {
+            method: "post",
+            //   parameters: {data:facebook_network},
+            requestHeaders: {Accept: "application/json"},
+            onSuccess: function (transport) {
+
+                timeresult = transport.responseText.evalJSON();
+                if (timeresult['result'])
+                {
+                    console.log('conn');
+                    fblogin();
+                } else
+                {
+                    alert(timeresult['msg']);
+                }
+            }
+        });
+    }
+
+
+//facebook login api
+
+
+
+
+
+
+
+
+    function fblogin() {
+
+
+        FB.login(function (response) {
+            testAPI();
+            if (response.status === "connected") {
+
+            } else if (response.status === "not_authorized") {
+
+            } else {
+            }
+        }, {scope: 'email,user_friends,public_profile', return_scopes: true});
+
+    }
+
+
+
+    function removefacebook() {
+        ajaxurl = "<?php echo $this->getUrl('facebook/index/removefacebookprofile'); ?>";
+        new Ajax.Request(ajaxurl, {
+            method: "post",
+            requestHeaders: {Accept: "application/json"},
+            onSuccess: function (transport) {
+
+                window.location.reload();
+            }
+        });
+
+    }
+
+    jQuery(document).ready(function () {
+<?php if ($this->getfacebookid() == "" && $this->getprofiledata() == ""): ?>
+
+            jQuery('#login').show();
+            jQuery("#logout").hide();
+<?php else: ?>
+
+            jQuery('#login').hide();
+            jQuery("#logout").show();
+<?php endif; ?>
+
+    });
+</script>

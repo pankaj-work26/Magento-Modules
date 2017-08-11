@@ -1,0 +1,108 @@
+<div class="fb_connects">testing
+    <?php
+    
+    $friendCount=0;
+    $otherUserCount=0;
+    
+        $pid = $this->getRequest()->getParam('id');
+         $customer = Mage::getSingleton('customer/session')->getCustomer();
+        $customerid = $customer->getId();
+
+
+        $facebookorder = Mage::getModel('facebook/facebook')->getCollection()->addFilter('facebookusermagentoid', $customerid);
+
+        $array = array();
+        foreach ($facebookorder as $val) {
+            $array[] = $val->getMagentoconnect();
+        }
+
+        $facebookorder = Mage::getModel('facebook/facebookorder')->getCollection()->addFieldToFilter('productid', $pid);
+
+
+        $html = "<div class='facebook_details'>";
+        $friendsHtml ='';
+        $otherHtml ='';
+                
+        foreach ($facebookorder->getData() as $value) {
+
+            $now = date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(time()));
+
+            $date1 = $value['orderdate'];
+            $date2 = $now;
+
+
+            $diff = abs(strtotime($date2) - strtotime($date1));
+            $years = floor($diff / (365 * 60 * 60 * 24));
+            $months = floor(($diff - $years * 365 * 60 * 60 * 24) / (30 * 60 * 60 * 24));
+            $days = floor(($diff - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24) / (60 * 60 * 24));
+            $hours = floor(($diff - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24 - $days * 60 * 60 * 24) / (60 * 60));
+            $minutes = floor(($diff - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24 - $days * 60 * 60 * 24 - $hours * 60 * 60) / 60);
+            $seconds = floor(($diff - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24 - $days * 60 * 60 * 24 - $hours * 60 * 60 - $minutes * 60));
+
+
+
+            if ($years == 0) {
+                if ($months == 0) {
+                    if ($days == 0) {
+                        if ($hours == 0) {
+                            if ($minutes == 0) {
+                                if ($seconds == 0) {
+                                    
+                                } else {
+                                    $ordertime = $seconds . " sec ago";
+                                }
+                            } else {
+                                $ordertime = $minutes . " min " . $seconds . " sec ago";
+                            }
+                        } else {
+                            $ordertime = $hours . " hr " . $minutes . " min ago";
+                        }
+                    } else {
+                        $ordertime = $days . " days " . $hours . " hr ago";
+                    }
+                } else {
+                    $ordertime = $months . " months " . $days . " days ago";
+                }
+            } else {
+                $ordertime = $years . " years " . $months . " months ago";
+            }
+
+
+
+            $fb_icon = Mage::getDesign()->getSkinUrl('images/facebook/fb_icon.png');
+            $customer_facebook_data = Mage::getSingleton('customer/customer')->load($value['customerid'])->getfacebookdata();
+            $facebook_data = json_decode($customer_facebook_data, TRUE);
+       
+            $connectHtml = " <div class='connect' id='" . $facebook_data['id'] . "'><a class='facebook_profile_link' href=' ". $facebook_data['profile']['link']."' target='_blank'><div class='img fb_user_details'><img class='profile_img'  src='" . stripslashes("http://graph.facebook.com/" . $facebook_data['id'] . "/picture?type=large") . "' ><div class='data_details'><span class='name'>" . $facebook_data['profile']['name'] . "</span><br><span class='gender'>( " . $facebook_data['profile']['gender'] . " )</span><br>  <div class='other'>" . $ordertime . " </div></div><i class='icon ion-social-facebook' ></i></div><div class='clear'></div></a></div>";
+          
+            $connectHtml .="  <script type='text/javascript'>
+                    jQuery('.fb_user_details').on('mouseenter', function(event){
+                         jQuery(this).find( '.data_details' ).slideDown();
+                    });
+                    jQuery('.fb_user_details').on('mouseleave', function(event){
+                         jQuery(this).find( '.data_details' ).slideUp();
+                    });
+                     </script>";
+         //   echo $value['customerid'];
+            if(in_array($value['customerid'], $array)){
+                $friendsHtml .=$connectHtml;
+                $friendCount=$friendCount+1;
+            }else{
+                $otherHtml .=$connectHtml;
+                $otherUserCount=$otherUserCount+1;
+            }
+        }
+         
+     
+     //   print_r($array);
+        if($friendsHtml){
+            $html .= $friendCount.' Facebook Friends Chooses this product:'.$friendsHtml ;
+        }
+        if($otherHtml){
+            $html .= $otherUserCount.' Other Facebook Users Chooses this product:'.$otherHtml ;
+        }
+        
+         $html .= "</div>";
+echo $html;        
+        ?>
+</div>

@@ -1,0 +1,205 @@
+.cancel{ 
+    position:relative;
+    left:115px;
+    opacity:.77; 
+    top:5px  
+}
+
+.facebook_logout{
+    position:absolute
+}
+.profile_data{
+    clear:both
+}
+.facebook_profile_picture{
+    height:100px ; 
+    width:100px
+}
+.facebook_profile .img{
+    float:left
+}
+.facebook-profile-title {
+    border-bottom: 1px solid #ccc;
+}
+.facebook_profile{ 
+    width:45%
+}
+.facebook_profile .right{ 
+    flaot:right;
+    width:65%
+}
+.facebook_profile .left{ 
+    flaot:left;
+    width:30%}
+.clear{
+    clear:both
+}
+.facebook_profile_heading, .facebook_connects_heading{
+    border-bottom:1px solid #ccc; 
+    margin:20px 0px 10px 0px
+}
+.facebook_profile  a {
+    color:black
+}
+.connect_profile_picture{
+    height:50px ;
+    width:50px
+}
+.facebook_connects td,th{
+    padding:5px
+}
+.facebook_connects th{
+    font-weight:bold;
+}
+.facebook_connects table{
+    border-collapse: collapse;
+    margin-top:30px;	
+    border:1px solid #bbafa0
+}
+
+.facebook_connects thead{
+    background-color:#f9f3e3;
+    border:1px solid #f19900
+}
+.facebook_connects table tbody tr.even{ 
+    background-color:#e0e0e0
+}
+
+.facebook_details{
+    min-width:500px;
+    min-height:500px;
+    text-align: left;
+}
+.facebook_details .other {
+     font-size: 10px;
+     position: absolute;
+     bottom: 0;
+     right: 0;
+}
+
+.facebook_details .ion-social-facebook{
+    font-size: 15px;
+  //  background-color: blue;
+    padding: 0px 6px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    color: black;
+}
+.facebook_details .profile_img{
+    height:100px; 
+    width:100px
+}
+.facebook_details  .fb_user_details{
+    position: relative;
+    cursor: pointer;
+    width: 100px;
+    display: inline-block;
+}
+.facebook_details  .data_details{
+    position: absolute; 
+    text-align: center;
+    background: #000 none repeat scroll 0 0;
+    opacity: 0.7;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 70%;
+    padding-top: 30%;
+    display: none;
+    color: white;
+    line-height: 1.2;
+    z-index: 20;
+}
+  
+.facebook_details .data_details span.name{
+    font-size:16px
+}
+.facebook_details .data_details span.location{
+    color:#b4b4b4;
+}
+
+
+.facebook_details div.connect{
+    border-bottom:1px solid #ccc;
+    padding:10px 0px 15px 0px
+}
+.facebook_details .none{
+    margin: 0 auto; 
+    font-size: 18px;
+    font-weight: bold
+}
+.loader{
+    position:fixed;
+    top:45%;
+    left:45%;
+    z-index: 1000; 
+    display: none 
+}
+.loader-main{
+    position:fixed;
+    top:0px;
+    left:0px;
+    width:100%;
+    height:100%;
+    background:#e8e8e8;
+    z-index: 999;
+    opacity:.4;
+    display: none
+}
+
+.facebook-customer-index #facebook_accounts{
+    width:100%;
+}
+
+.facebook-customer-index #facebook_accounts .info-left{
+    width:25%;
+    float:left;
+}
+.facebook-customer-index #facebook_accounts .info-left img{ 
+    width: 36px;
+    height: 36px;
+}
+.facebook-customer-index #facebook_accounts .info-right{
+    width:60%;
+    float:left;
+}
+.facebook-customer-index #facebook_accounts .info-right div a{
+    text-decoration:none;
+}
+.facebook-customer-index #facebook_accounts .info-right div.Connect{
+    width: 70px;
+}
+.facebook-customer-index #facebook_accounts .info-right div.Disconnect{
+    width: 70px;
+}
+.facebook-customer-index #facebook_accounts .info-right span.Connect{
+    display: block;
+    /* height: 35px; */
+    width: 70px;
+    background-color: #f18200;
+    padding: 4px 5px 8px 25px;
+    font-size: 14px;
+    color: white;
+}
+.facebook-customer-index #facebook_accounts .info-right span.Disconnect{
+    display: block;
+    /* height: 35px; */
+    width: 70px;
+    background-color: #f18200;
+    padding:  4px 14px 8px 16px;
+    font-size: 14px;
+    color: white;
+}
+
+.facebook-customer-index #facebook_accounts  li
+{
+
+    float:left;
+    width:32%;
+}
+
+.facebook-main .facebook-title{
+    border-bottom:1px solid #ccc
+}
+

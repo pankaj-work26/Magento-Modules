@@ -1,0 +1,66 @@
+
+
+<?php $customer_facebook_data = $this->getprofiledata(); ?>
+<?php if ($customer_facebook_data['id']): ?>
+
+    <div class='facebook_profile_heading'>
+        <h1>Facebook Profile: </h1>
+    </div>
+    <div class="facebook_profile" id="<?php echo $customer_facebook_data['id']; ?>">
+        <a class="facebook_profile_link" href="<?php echo $customer_facebook_data['profile']['link']; ?>" target="_blank">
+            <div class="left"> 
+                <div class="img">
+                    <img src='<?php echo stripslashes("http://graph.facebook.com/" . $customer_facebook_data['id'] . "/picture?type=large"); ?>' class="facebook_profile_picture">
+                </div>
+            </div>
+            <div class="right">
+                <div class="name" >
+                    <?php echo $customer_facebook_data['profile']['name']; ?>
+                </div>
+                <div class="gender" >
+                    <?php echo $customer_facebook_data['profile']['gender']; ?>
+                </div>
+                <div class="dob" >
+                    <?php echo $customer_facebook_data['profile']['birthday']; ?>
+                </div>
+                <div class="address" >
+                    <?php echo $customer_facebook_data['profile']['email']; ?>
+                </div>
+
+
+
+
+            </div>
+        </a>
+    </div>
+
+
+    <div class="clear"></div>
+    <?php $customer_facebook_data = $this->getprofiledata(); ?>
+    <?php if ($customer_facebook_data): ?>
+        <div class="facebook_connects">
+
+            <div class='facebook_connects_heading'>
+                <h1>Facebook Connects on Magento: </h1>
+            </div>
+            <table id='facebook_connects'>
+                <thead><tr><th>S.No.</th><th>Profile Picture</th><th>Name</th><th>Email</th></tr></thead>
+                <tbody>
+                    <?php $customer_facebook_connect = $this->getconnectdata(); ?>
+                    <?php foreach ($customer_facebook_connect as $val) { ?>
+                        <?php $i = $i + 1; ?>
+                        <tr id='<?php echo $val["id"]; ?>'><td><?php echo $i; ?></td><td><img class='connect_profile_picture' src="<?php echo stripslashes("http://graph.facebook.com/" . $val["id"] . "/picture?type=large"); ?>" ></td><td><?php echo $val['profile']['name']; ?></td><td><?php echo $val['profile']['email']; ?></td></tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
+        <script type="text/javascript">
+            //<![CDATA[
+            decorateTable('facebook_connects');
+            //]]>
+        </script>
+    <?php endif; ?>
+    <div class='loader-main'>
+        <div class="loader" id="loader" ><img src="<?php echo $this->getSkinUrl('fancyapps/loader.gif'); ?>"></div>
+    </div>
+<?php endif; ?>

@@ -1,0 +1,10 @@
+<?php
+
+class Pk_Facebook_Model_Facebookorder extends Mage_Core_Model_Abstract {
+
+    public function _construct() {
+        parent::_construct();
+        $this->_init('facebook/facebookorder');
+    }
+
+}

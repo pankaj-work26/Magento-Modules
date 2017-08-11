@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Pk_Facebook>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Pk_Facebook>
+    </modules>
+</config> 
